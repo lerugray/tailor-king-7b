@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tailor-king — a Jan van Leiden / Münster register model (local 7B)</title>
+<meta name="description" content="A small language model tuned to the voice of the Anabaptist kingdom of Münster (1534–35): apocalyptic, theocratic, scriptural. A register, not a biography. Public weights, runs locally.">
+<meta property="og:title" content="tailor-king — the voice of the Münster New Jerusalem">
+<meta property="og:description" content="A local 7B tuned to the register of Jan van Leiden's apocalyptic kingdom. It proclaims; it does not reassure. Public weights, CC-BY-NC-4.0.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lerugray.github.io/tailor-king-7b/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tailor-king — the voice of the Münster New Jerusalem">
+<meta name="twitter:description" content="A local 7B tuned to the register of Jan van Leiden's apocalyptic kingdom. Public weights, runs offline.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#e9e0cd; --dim:#b3a888; --gold:#d4a531; --stone:#14110d; --line:rgba(212,165,49,.28); }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--stone); }
+  ::selection { background: rgba(212,165,49,.28); color:#fff5dd; }
+  body { color:var(--ink); font-family:'Cormorant Garamond', Georgia, serif; line-height:1.6;
+    background:
+      radial-gradient(ellipse 90% 60% at 50% -10%, rgba(212,165,49,.07), transparent 60%),
+      var(--stone);
+    padding: 48px 22px 60px; }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  .ascii { display:flex; justify-content:center; overflow:hidden; }
+  .ascii pre { margin:0; color:var(--gold); font-family:'IBM Plex Mono', monospace;
+    font-size: clamp(3.6px, 1.05vw, 8px); line-height:1.05; white-space:pre; letter-spacing:0;
+    text-shadow: 0 0 8px rgba(212,165,49,.25); opacity:.92; }
+  h1 { text-align:center; font-size: clamp(46px, 11vw, 104px); font-weight:600; letter-spacing:.05em;
+    margin:.35em 0 0; color:#f1e6cb; line-height:1; }
+  .sub { text-align:center; font-size: clamp(17px,2.6vw,23px); color:var(--gold); font-style:italic;
+    margin:.4em auto 0; letter-spacing:.02em; }
+  .epi { text-align:center; font-size: clamp(15px,2vw,18px); color:var(--dim); max-width:560px;
+    margin:1.4em auto 0; }
+  .rule { height:1px; max-width:560px; margin:42px auto; background:
+    repeating-linear-gradient(90deg, var(--line) 0 7px, transparent 7px 14px); }
+  h2 { font-size: clamp(13px,1.6vw,15px); font-weight:600; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--gold); font-family:'IBM Plex Mono', monospace; margin:0 0 14px; }
+  p.body { font-size: clamp(16px,2.1vw,19px); color:var(--ink); margin:0 0 16px; }
+  em { color:#f1e6cb; }
+  .samples { display:flex; flex-direction:column; gap:20px; }
+  .sample { border:1px solid var(--line); border-radius:4px; padding:18px 20px; background:rgba(212,165,49,.03); }
+  .sample .q { font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.08em;
+    color:var(--gold); text-transform:uppercase; margin-bottom:9px; }
+  .sample .a { font-size: clamp(16px,2.1vw,19px); color:var(--ink); }
+  .note { font-size:13px; color:var(--dim); text-align:center; letter-spacing:.04em; margin:-6px auto 24px; max-width:560px; }
+  .links { text-align:center; font-family:'IBM Plex Mono', monospace; font-size:14px; line-height:2.2; }
+  .links a { color:var(--gold); text-decoration:none; border-bottom:1px dotted var(--line); }
+  .links code { color:var(--ink); background:rgba(212,165,49,.08); padding:2px 8px; border-radius:3px;
+    font-size:13px; }
+  .foot { text-align:center; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--dim);
+    letter-spacing:.06em; margin-top:48px; line-height:1.9; }
+  .foot .mark { color:var(--gold); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="ascii"><pre>                                            .XXXX$$X$$$$X+;:
+                                         +xX$$$$$$$X$&XXx+X$$xx;
+                                      xxx$X$$X$$&$$&&$x$&$XXxX$$$+++
+                                    ;+xxXx&xxx$$$$X$&$$$Xx$$&$X++xXXxx::
+                                  ;++;xX+X+xX;Xx&$$XXX&$XxXxX$XXx++;:+;;x:: .;+xXxxX;.
+                                :xxx;+x;x;:+X;+xxXXXX++xX;:.  ;+X;:.x$&&&$&&&&&$&$$X$$$+:
+                               :x;+;++.+++:+x;+xX$Xx+;   x:. $$$$$$&$$$$x$XX$$&$$$&$$$$$$.
+                             .:++x.x+;:xX;;++x;:+   .x:.$X&&$$&$XxX+xx$$$X$$$$&$$&&&$$X$Xx;
+                            :+;x:.;.:.+:x.:;.   X++X$$X&$XXX+x$&$;xx+X$$x$$&$XX&$$$X$$$X$Xx
+                           :X+xx::+x;:;   :..;X$&$$XXX$&$$Xx;X$Xx$$$$X&$$$xXXx$X$$$&X$&$X:x
+                         :;X++X;:;   :. :X$x+x+.:;+X+x$&+::;x++xxX+xXX$$$XxXX$$$$$X&&$XX$;:
+                        ;++ ..+;; ;;.:;.+;;+xx::;::;++XxxX.;+.::++Xx&$$$$$$&$$$$x$$&$Xxx+X
+                        .++:xX$X;: ;               :.:+;+;++:+x+:x++x;$&&XX:$&$X$&$XXXXX+:
+                     ;:X$$$Xx+x+:                        :;;;xx;;;+X+$xxX&$+x$$xXx+$$+$+:
+                 :;.x$$$$$X:XxX:                         ..:::+.  .+XXXXXX$$XXx$$XX$$Xx:
+               ;:xxxXxXXX$XXXX$.                          .:;;  .  ;xX$X$+++X++XxX$$$+;
+              ;;++++XXxXxXX+XXX                            ..;.;:;;+XXxX$$$$X;+$$$$X;;
+             +:+xx++xxX;+XXXxXx                   .;XXxx+...:;;:x+:;x:x$Xx$XXxX$&$X::
+             ;;;;++x;XX;;XX$Xx;   .+XX       .XX$x:      ;++:.::;++;++XxXX$$xxX$&$x.
+             +++;++xx;;+++X$XxXx+x+;:+X    :x$Xx$$Xx;. . ..:..: .:x+xx++X$$$$Xx$++
+             :;xxxxxXx+x;XX$x$$+; +Xx+X   :Xx;. . ;$: .xx+;:    .:.:;++ :+x$XXX;:
+              ;;xx+XXX+x+XXXXX$x;.    .  :Xx+:  .     :.x:.     .:;.::..+:+x+x+;
+               :+xxXXxX+xXXxX;$x;.::.    :++::       .::+.      :;:.  ;x:.++;;
+                ::xxxXxXxXX$$$$+        .;;::                 .::..   :X+: :;.
+                  :;+xXXXXx$$$$x:    .  x+;                  .;;:..  +;  :x;
+                    :;+xXx$X$$$X+:;    :+;;+:            :;+++:::..  ... X;::
+                       ;+;$XX$$$x;.     +:.;+:.     .:;+++;+;;+;:::; .+XXXxX;
+                         .;x$$X$$;  xxXx$$$X+; .:   ::+++++:+::.   ;xXxXX$$X$$X++;:
+                             ;;+x+    ;XXXxx .   .:  :;;+:;+:  ..++xXxXx$$x&$&&&$XX++:
+                               ;+ xxX.   :::+$Xx+X+::.:;;;:.: ;x+;Xxx+$$X$X$xXx;$&$$$$x;
+                               .:xXxX+.++.+;xx$$$X$+;:.::. : +Xx+XX$XxxXxX$$XXx;;;x$&$$Xx;
+                               xx$$: :: . .: :;x+XXX+;;;;  x+++xXx;Xx$X$X+$$x++++:;.+$$$XX+
+                            ;xx.::;;++x$xxXx+;x:+:;+xx; ::;+XXX$:+XXx$Xx$$XX$x;:;+;  .$$$XXx:
+                          ;xX$X;x:+ . . . ...  .;xx+..:;xxX$XXxxXXX;+;x;$x$x;+;:  :.   $$$XXX;
+                       :+XxX$$$X$$+x.:.;. ;  :+x;$:::+X++XX$$X$xX+XXxXXxXX$x+..:   ;   ;X$XxX+:
+                     +;XxXX$$$+XxxXx+.:;x++;XX+xx$:;x$X$XX;+XX+x$x$XX+XXxX++;...  .     XXXXXxX....
+                   ;x+XXXX$$$$x;;+:xx. ..::;:+x;;xXX$xXxX$XxxXx+XXxXXXXXxxX.. .        .X$x;XXx$;
+                 :;xxXX$$X;x$$xx+xXXxX:.+x::. ;x;xx$$xxx$$.;x;+xx+XXx.;xxx:::...       :XxxXXxX$x:.:
+               :++xXXXXx:;++X$$+$xxXx;;:xXxx; x++x$Xx+X+Xx;:;X+XX:.+;+:x+::   :        X+X+X$XxX;:..
+             .;;+xxxXX  ::+++X;.+XXxx+;;;X; X:;::xXXXX.+xXx;xxX;+: ;x;xX.     .        $Xxx$$Xx$Xx+:
+            :;;xxXxx:  ..;;;+x:.+  ;.++++xXxx;;++;xXx ++:+x:;:  :x;x;+x. .            X$xxX$XxX$X$$+
+           :+;+xXxX     .::+x+;;:            + .x;            .;.;:x;+               x$$+X$$$$$x$$$X
+          :+::xxxX       +x;Xx+;;:        ;      .. :; ;   .  : .  x; .             :X+xx$$$X&$$$X$$
+         +;;++X+x     ..:;::xX;:          .     .   :      .  : :.;;    :       :  +xXxXX$$$&$$$$&$$
+        .;+;xxx+       .:.::XXX+..                    .    .   : :+            $$$X$xXX$$X$X$$$&$$$&
+       :::++xxXx       .:.::Xx++xX  +  ;                   . . :;             X$$$$xxXxX$&X$X&&&&&&$
+  .   .;.:+++xxxx      .;:; xxx++...::;xx;;X   +     .  XXxx;                 xXX$X$$X$&$$$&&$&&X+X&
+      .. .+++x$xXx     .. : xXx+::                       +    .              X$X++XXx$$$$$X$&$XXX$x$
+  ....:+x;;;+XXXxx;  .  :::.;X$+;..             .         . ;;             :xx$x+;+&&$$$$$$$X$$xXX+$
+  . .;+xXX+:+xxX$Xx      :. +x;::;.:                :..:                  +x$x;+x+&$$&x$$&$$&xX$X$XX
+..:++XXXXxx;x+Xx+X$    .:.  ++;. :          .  . ;                       Xxx+xx+$&$&&$XXXXxXX$XX&$$x
+.:++XxXxX$$;;;xx;+X+    .x  .+x  :      :  ..;                         ;XXx+++X$&$$$&Xx$XXXx$XXX$XXx
++;xXxX+x$XX+;:x+xXXX  . :    +x          ;:                           Xx$X;xx$$$$$&$$$$XX$XXXXXXXx$$
+++xxx+x$$X$x;;+xxX$X    ; ;  ++       +::X;:;                        xX$+++x$x$&&$$$$$$&$$xXxxxX+X$X
++++X;+X$Xx$$;+x;;+X$     :.  +;        : x ;:                      +XXX;;++&$$$$X$$$$X$xX$XXXx+xXxXX
+;+x.+xXXxXX$+;.+xXX$     ..  +; .      . +.x.                     XXxx+x;x$$XXX&&&$X&&&X$$$$X;xxX+$x</pre></div>
+
+  <h1>TAILOR-KING</h1>
+  <div class="sub">Jan van Leiden &middot; the New Jerusalem at Münster, 1534&ndash;35</div>
+  <p class="epi">In 1534 a Dutch journeyman tailor was crowned king of a city that abolished money, held all goods in common, and waited for the end of the world. This is its voice.</p>
+
+  <div class="rule"></div>
+
+  <section>
+    <h2>What it is</h2>
+    <p class="body">A small language model tuned to the register of the Anabaptist kingdom of Münster: apocalyptic, theocratic, scriptural. It is a <em>register, not a biography or a source</em>. Read it for the voice, not the record. Ask it about the New Jerusalem, the holding of goods in common, the godless princes, or the present day, and it answers from the throne of the last days.</p>
+    <p class="body">The voice it learns is mostly the kingdom's own theologian, <em>Bernhard Rothmann</em>, whose <em>Restitution</em> survives in public-domain German. Its English here is our own fresh translation, so the spine is unencumbered; a small modern-bridge lets the king-prophet's lens fall on the present. Built on Qwen2.5-7B.</p>
+  </section>
+
+  <div class="rule"></div>
+
+  <section>
+    <h2>Saved sample outputs</h2>
+    <div class="note">Saved generations, not a live prompt. Run the weights to consult it yourself.</div>
+    <div class="samples">
+      <div class="sample">
+        <div class="q">On the New Jerusalem</div>
+        <div class="a">&ldquo;This present city, Münster, is indeed called the New Jerusalem. But the New Jerusalem can have only one king, and that is Christ; and all the saints shall serve Him in it, as now we are beginning to do here. Only those who stand with us shall enter it.&rdquo;</div>
+      </div>
+      <div class="sample">
+        <div class="q">On the holding of goods in common</div>
+        <div class="a">&ldquo;All possessions are to be held in common. It is written in Acts: &lsquo;All who believed had everything in common.&rsquo; It is unjust that one man should have more than another, especially now, when the poor are oppressed and the rich walk over the needy. So we have laid aside our private possessions, that the one may use what the other lacks.&rdquo;</div>
+      </div>
+      <div class="sample">
+        <div class="q">On lending money at interest</div>
+        <div class="a">&ldquo;What the unrighteous power carries out in the great houses of banking is contrary to Christian teaching. To lend money at interest is usury, and God has forbidden it twice in the Scripture. I hate that man who makes usury of my people, says the Lord of hosts.&rdquo;</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <section>
+    <h2>Honest notes</h2>
+    <p class="body">It invents freely: names, dates, scripture. A regurgitation audit found no long verbatim reproduction of its source texts; it generates novel prose in the register. Jan van Leiden's surviving &ldquo;confessions&rdquo; are captor-mediated interrogation records, so the model is weighted toward the kingdom's <em>authored</em> theology rather than any one man's verified words.</p>
+  </section>
+
+  <div class="rule"></div>
+
+  <section style="text-align:center;">
+    <h2 style="text-align:center;">Run it</h2>
+    <div class="links">
+      <code>ollama run hf.co/lerugray/tailor-king-7b</code><br>
+      <a href="https://huggingface.co/lerugray/tailor-king-7b">weights &rarr; huggingface</a>
+      &nbsp;&middot;&nbsp;
+      <a href="https://github.com/lerugray/tailor-king-7b">code &rarr; github</a>
+    </div>
+  </section>
+
+  <div class="foot">
+    <div class="mark">&#10013;</div>
+    <div>tailor-king is part of <a href="https://lerugray.github.io/the-elect/" style="color:var(--gold);text-decoration:none;border-bottom:1px dotted var(--line);">The Elect</a>. Public weights, CC-BY-NC-4.0.</div>
+    <div>A register model. The voice of a kingdom that fell in 1535.</div>
+  </div>
+
+</div>
+</body>
+</html>
