@@ -54,6 +54,30 @@
   .sample .q { font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.08em;
     color:var(--gold); text-transform:uppercase; margin-bottom:9px; }
   .sample .a { font-size: clamp(16px,2.1vw,19px); color:var(--ink); }
+  .oracle-terminal { border:1px solid var(--line); border-radius:4px; background:rgba(212,165,49,.03); overflow:hidden; position:relative; }
+  .oracle-terminal::before { content:''; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(ellipse at 50% 0%, rgba(212,165,49,.08), transparent 58%); }
+  .terminal-bar { position:relative; z-index:1; display:flex; justify-content:space-between; align-items:center;
+    padding:10px 14px; border-bottom:1px solid var(--line); background:rgba(0,0,0,.28); }
+  .terminal-label { font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); }
+  .terminal-nav { display:flex; align-items:center; gap:8px; }
+  .nav-btn { font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--dim); border:1px solid var(--line);
+    background:transparent; padding:3px 10px; border-radius:3px; cursor:pointer; transition:all .2s ease; }
+  .nav-btn:hover { color:var(--ink); border-color:var(--gold); background:rgba(212,165,49,.08); }
+  .oracle-counter { font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--dim); min-width:48px; text-align:center; }
+  .oracle-body { position:relative; z-index:1; padding:20px; min-height:220px; }
+  .oracle-prompt { font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--gold); border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:12px; }
+  .oracle-prompt::before { content:'> '; color:var(--gold); }
+  .oracle-text { font-size: clamp(16px,2.1vw,19px); color:var(--ink); line-height:1.6; transition:opacity .25s ease; }
+  .oracle-text.fading { opacity:0; }
+  .oracle-cursor { display:inline-block; width:8px; height:1em; margin-left:2px; vertical-align:text-bottom;
+    background:var(--gold); animation:cursor-blink 1.4s step-end infinite; opacity:.75; }
+  .oracle-advance { position:relative; z-index:1; display:block; width:100%; border:none; border-top:1px solid var(--line);
+    background:transparent; color:var(--gold); font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.14em;
+    text-transform:uppercase; padding:11px 14px; cursor:pointer; transition:all .2s ease; }
+  .oracle-advance:hover { color:var(--ink); background:rgba(212,165,49,.08); border-top-color:var(--gold); }
+  @keyframes cursor-blink { 0%, 100% { opacity:.75; } 50% { opacity:0; } }
   .note { font-size:13px; color:var(--dim); text-align:center; letter-spacing:.04em; margin:-6px auto 24px; max-width:560px; }
   .links { text-align:center; font-family:'IBM Plex Mono', monospace; font-size:14px; line-height:2.2; }
   .links a { color:var(--gold); text-decoration:none; border-bottom:1px dotted var(--line); }
@@ -139,21 +163,22 @@
   <div class="rule"></div>
 
   <section>
-    <h2>Saved sample outputs</h2>
-    <div class="note">Saved generations, not a live prompt. Run the weights to consult it yourself.</div>
-    <div class="samples">
-      <div class="sample">
-        <div class="q">On the New Jerusalem</div>
-        <div class="a">&ldquo;This present city, Münster, is indeed called the New Jerusalem. But the New Jerusalem can have only one king, and that is Christ; and all the saints shall serve Him in it, as now we are beginning to do here. Only those who stand with us shall enter it.&rdquo;</div>
+    <h2>Voice samples</h2>
+    <div class="note">Real generations. Navigate with arrows or keyboard.</div>
+    <div class="oracle-terminal" id="oracleTerminal">
+      <div class="terminal-bar">
+        <span class="terminal-label">TAILOR-KING &middot; tailor-king-7b</span>
+        <div class="terminal-nav">
+          <button class="nav-btn" id="prevBtn" aria-label="Previous answer">&#9664;</button>
+          <span class="oracle-counter" id="oracleCounter">1 / 3</span>
+          <button class="nav-btn" id="nextBtn" aria-label="Next answer">&#9654;</button>
+        </div>
       </div>
-      <div class="sample">
-        <div class="q">On the holding of goods in common</div>
-        <div class="a">&ldquo;All possessions are to be held in common. It is written in Acts: &lsquo;All who believed had everything in common.&rsquo; It is unjust that one man should have more than another, especially now, when the poor are oppressed and the rich walk over the needy. So we have laid aside our private possessions, that the one may use what the other lacks.&rdquo;</div>
+      <div class="oracle-body">
+        <div class="oracle-prompt" id="oraclePrompt">On the New Jerusalem</div>
+        <div class="oracle-text" id="oracleText">&ldquo;This present city, Münster, is indeed called the New Jerusalem. But the New Jerusalem can have only one king, and that is Christ; and all the saints shall serve Him in it, as now we are beginning to do here. Only those who stand with us shall enter it.&rdquo;<span class="oracle-cursor" aria-hidden="true"></span></div>
       </div>
-      <div class="sample">
-        <div class="q">On lending money at interest</div>
-        <div class="a">&ldquo;What the unrighteous power carries out in the great houses of banking is contrary to Christian teaching. To lend money at interest is usury, and God has forbidden it twice in the Scripture. I hate that man who makes usury of my people, says the Lord of hosts.&rdquo;</div>
-      </div>
+      <button class="oracle-advance" id="advanceBtn">NEXT ANSWER &rarr;</button>
     </div>
   </section>
 
@@ -186,5 +211,97 @@
   </div>
 
 </div>
+<script>
+// ============================================================
+// Answer player
+// Loads from assets/samples.json; falls back to 2 inline entries
+// ============================================================
+
+const INLINE_ORACLES = [
+  {
+    prompt: "On the New Jerusalem",
+    text: "\"This present city, Münster, is indeed called the New Jerusalem. But the New Jerusalem can have only one king, and that is Christ; and all the saints shall serve Him in it, as now we are beginning to do here. Only those who stand with us shall enter it.\""
+  },
+  {
+    prompt: "On the holding of goods in common",
+    text: "\"All possessions are to be held in common. It is written in Acts: 'All who believed had everything in common.' It is unjust that one man should have more than another, especially now, when the poor are oppressed and the rich walk over the needy. So we have laid aside our private possessions, that the one may use what the other lacks.\""
+  }
+];
+
+let oracles = [...INLINE_ORACLES];
+let currentIndex = 0;
+
+const promptEl = document.getElementById('oraclePrompt');
+const textEl = document.getElementById('oracleText');
+const counterEl = document.getElementById('oracleCounter');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const advanceBtn = document.getElementById('advanceBtn');
+
+function updateCounter() {
+  counterEl.textContent = (currentIndex + 1) + ' / ' + oracles.length;
+}
+
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/\n\n/g, '<br><br>');
+}
+
+function showOracle(idx) {
+  var o = oracles[idx];
+  textEl.classList.add('fading');
+  setTimeout(function() {
+    promptEl.textContent = o.prompt;
+    textEl.innerHTML = escapeHtml(o.text) +
+      '<span class="oracle-cursor" aria-hidden="true"></span>';
+    textEl.classList.remove('fading');
+    updateCounter();
+  }, 240);
+}
+
+prevBtn.addEventListener('click', function() {
+  currentIndex = (currentIndex - 1 + oracles.length) % oracles.length;
+  showOracle(currentIndex);
+});
+
+nextBtn.addEventListener('click', function() {
+  currentIndex = (currentIndex + 1) % oracles.length;
+  showOracle(currentIndex);
+});
+
+advanceBtn.addEventListener('click', function() {
+  currentIndex = (currentIndex + 1) % oracles.length;
+  showOracle(currentIndex);
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') nextBtn.click();
+  if (e.key === 'ArrowLeft') prevBtn.click();
+});
+
+fetch('./assets/samples.json')
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (Array.isArray(data) && data.length > 0) {
+      var valid = data.filter(function(d) {
+        return d && d.text && d.text.trim().length > 0 &&
+               d.text.indexOf('[ERR]') === -1;
+      });
+      if (valid.length > 0) {
+        oracles = valid;
+        currentIndex = 0;
+        showOracle(0);
+        updateCounter();
+      }
+    }
+  })
+  .catch(function() { /* offline / file:// -- use inline fallback silently */ });
+
+updateCounter();
+</script>
 </body>
 </html>
